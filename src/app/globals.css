@@ -1,0 +1,301 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * 디자인 토큰 — PRD §2 "무겁고 신뢰가는 느낌"
+ *
+ * 진한 남색 잉크에 놋쇠(brass) 강조 하나. 단일 라이트 테마로 못 박는다.
+ * 금융사 화면에서 다크 모드는 요구된 적이 없고, 두 벌을 관리하면
+ * 문구 검토(§15)를 두 번 해야 한다.
+ * ------------------------------------------------------------------ */
+
+@theme {
+  --color-ground: #f2f4f8;
+  --color-paper: #ffffff;
+  --color-sunk: #e9ecf2;
+  --color-ink: #101a2c;
+  --color-inksoft: #3b4759;
+  --color-mute: #5e6a7c;
+  --color-hair: #d5dae3;
+  --color-hairsoft: #e6e9ef;
+  --color-brass: #7e5c22;
+  --color-brasssoft: #f3ecdd;
+  --color-slate: #294763;
+  --color-flag: #8a3a2a;
+  --color-flagsoft: #f7e6e2;
+  --color-good: #275c44;
+  --color-goodsoft: #e2eee8;
+
+  --font-serif: "Noto Serif KR", "Nanum Myeongjo", Georgia, serif;
+  --font-sans: "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", Consolas, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  body {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  ::selection {
+    background: var(--color-brasssoft);
+  }
+}
+
+@layer components {
+  /* ---------- 표면 ---------- */
+  .card {
+    background: var(--color-paper);
+    border: 1px solid var(--color-hair);
+    border-radius: 3px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-brass);
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- 버튼 ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.12s, border-color 0.12s, color 0.12s;
+    white-space: nowrap;
+  }
+  .btn:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-slate);
+  }
+  .btn-ghost {
+    background: transparent;
+    border-color: var(--color-hair);
+    color: var(--color-inksoft);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+  .btn-quiet {
+    background: transparent;
+    color: var(--color-mute);
+    padding: 0.5rem 0.25rem;
+  }
+  .btn-quiet:hover:not(:disabled) {
+    color: var(--color-ink);
+  }
+  .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  /* ---------- 선택지 (한 화면 한 질문의 주인공) ---------- */
+  .choice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    width: 100%;
+    text-align: left;
+    padding: 1.05rem 1.25rem;
+    background: var(--color-paper);
+    border: 1px solid var(--color-hair);
+    border-radius: 3px;
+    font-size: 1rem;
+    line-height: 1.55;
+    cursor: pointer;
+    transition: border-color 0.12s, background-color 0.12s;
+  }
+  .choice:hover {
+    border-color: var(--color-slate);
+  }
+  .choice[data-selected="true"] {
+    border-color: var(--color-ink);
+    background: var(--color-brasssoft);
+    box-shadow: inset 3px 0 0 var(--color-brass);
+  }
+  .choice-mark {
+    flex: none;
+    width: 1.05rem;
+    height: 1.05rem;
+    margin-top: 0.32rem;
+    border: 1px solid var(--color-mute);
+    border-radius: 50%;
+    position: relative;
+  }
+  .choice[data-kind="multi"] .choice-mark {
+    border-radius: 2px;
+  }
+  .choice[data-selected="true"] .choice-mark {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+  }
+  .choice[data-selected="true"] .choice-mark::after {
+    content: "";
+    position: absolute;
+    inset: 0.24rem;
+    background: #fff;
+    border-radius: inherit;
+  }
+
+  /* ---------- 입력 ---------- */
+  .field {
+    display: block;
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    background: var(--color-paper);
+    border: 1px solid var(--color-hair);
+    border-radius: 2px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--color-ink);
+  }
+  .field::placeholder {
+    color: color-mix(in srgb, var(--color-mute) 60%, transparent);
+  }
+  .field:focus {
+    border-color: var(--color-slate);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-flag);
+  }
+  .field-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-inksoft);
+    margin-bottom: 0.35rem;
+  }
+  .field-error {
+    font-size: 0.82rem;
+    color: var(--color-flag);
+    margin-top: 0.3rem;
+  }
+
+  /* ---------- 배지 ---------- */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.74rem;
+    font-weight: 500;
+    padding: 0.14rem 0.5rem;
+    border-radius: 2px;
+    border: 1px solid var(--color-hair);
+    color: var(--color-inksoft);
+    background: var(--color-sunk);
+    white-space: nowrap;
+  }
+  .pill-flag {
+    border-color: var(--color-flag);
+    color: var(--color-flag);
+    background: var(--color-flagsoft);
+  }
+  .pill-brass {
+    border-color: var(--color-brass);
+    color: var(--color-brass);
+    background: var(--color-brasssoft);
+  }
+  .pill-good {
+    border-color: var(--color-good);
+    color: var(--color-good);
+    background: var(--color-goodsoft);
+  }
+
+  /* ---------- 안내 상자 ---------- */
+  .note {
+    background: var(--color-paper);
+    border-left: 3px solid var(--color-brass);
+    padding: 0.95rem 1.1rem;
+    font-size: 0.9rem;
+    color: var(--color-inksoft);
+  }
+  .note-flag {
+    border-left-color: var(--color-flag);
+    background: var(--color-flagsoft);
+    color: var(--color-flag);
+  }
+
+  /* ---------- 진행 막대 ---------- */
+  .progress-track {
+    height: 3px;
+    background: var(--color-hairsoft);
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--color-brass);
+    transition: width 0.28s ease;
+  }
+
+  /* ---------- 표 ---------- */
+  .grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .grid-table th {
+    text-align: left;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-mute);
+    font-weight: 500;
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid var(--color-hair);
+    white-space: nowrap;
+  }
+  .grid-table td {
+    padding: 0.75rem 0.85rem;
+    border-bottom: 1px solid var(--color-hairsoft);
+    vertical-align: top;
+  }
+  .grid-table tbody tr:hover {
+    background: var(--color-sunk);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
