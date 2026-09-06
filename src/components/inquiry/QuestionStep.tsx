@@ -115,7 +115,8 @@ function MultiSelect({
 
   return (
     <div className="grid gap-2.5">
-      <p className="text-sm text-mute">해당되는 것을 모두 골라주세요.</p>
+      {/* 문항이 이미 같은 안내를 갖고 있으면 또 쓰지 않는다 */}
+      {!question.help && <p className="text-sm text-mute">해당되는 것을 모두 골라주세요.</p>}
       {question.choices?.map((choice) => (
         <button
           key={choice.value}
